@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+
+  sm-front-dev:
+    build:
+      context: .
+    container_name: sm-front-dev
+    network_mode: sm-network
+    env_file:
+      - ${env_file:-.env}
+    ports:
+      - "${FRONTEND_DEV_PORT}:${FRONTEND_PORT}"
+
+
+  sm-front-stage:
+    build:
+      context: .
+      target: prod
+    image: ${GITLAB_URL}/${IMAGE_NAME:-sm-frontend}:${TAG:-latest}
+    container_name: sm-front-stage
+    network_mode: sm-network
+    env_file:
+      - ${env_file:-.env}
+    ports:
+      - "${FRONTEND_PROD_PORT}:${FRONTEND_PORT}"  
+
+  sm-front-prod:
+    image: ${IMAGE_NAME:-sm-frontend}
+    container_name: sm-front-prod
+    network_mode: sm-network
+    env_file:
+      - ${env_file:-.env}
+    ports:
+      - "${FRONTEND_PROD_PORT}:${FRONTEND_PORT}"
+
+
+networks:
+  sm-network:
+    external: true 
+
+
+  
+      
