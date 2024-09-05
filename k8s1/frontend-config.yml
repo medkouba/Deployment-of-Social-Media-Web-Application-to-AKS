@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-config
+  namespace: sm-app
+data:
+  backend_url: http://sm-backend-service:8085/

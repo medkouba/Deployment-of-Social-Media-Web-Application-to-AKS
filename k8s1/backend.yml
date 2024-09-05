@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sm-backend-deployment
+  labels:
+    app: sm-backend
+  namespace: sm-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sm-backend
+  template:
+    metadata:
+      labels:
+        app: sm-backend
+    spec:
+      imagePullSecrets:
+      - name: my-registry-key
+      containers:
+      - name: sm-backend
+        image: registry.gitlab.com/socialmedia725/sm-backend:latest
+        ports:
+        - containerPort: 8085
+        env:
+        - name: DB_CONNECT
+          valueFrom:
+            configMapKeyRef:
+              name: backend-config
+              key: db_connect
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: sm-backend-service
+  namespace: sm-app
+spec:
+  selector:
+    app: sm-backend
+  ports:
+  - protocol: TCP
+    port: 8085
+    targetPort: 8085

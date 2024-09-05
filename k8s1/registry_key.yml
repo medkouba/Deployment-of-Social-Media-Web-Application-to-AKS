@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: my-registry-key
+  namespace: sm-app
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: ****

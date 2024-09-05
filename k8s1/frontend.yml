@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sm-frontend-deployment
+  labels:
+    app: sm-frontend
+  namespace: sm-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sm-frontend
+  template:
+    metadata:
+      labels:
+        app: sm-frontend
+    spec:
+      imagePullSecrets:
+      - name: my-registry-key
+      containers:
+      - name: sm-frontend
+        image: registry.gitlab.com/socialmedia725/sm-frontend:1.0.0
+        ports:
+        - containerPort: 80
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: sm-frontend-service
+  namespace: sm-app
+spec:
+  selector:
+    app: sm-frontend
+  ports:
+  - protocol: TCP
+    port: 3000
+    targetPort: 80
+

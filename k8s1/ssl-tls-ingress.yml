@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ssl-tls-ingress
+  namespace: sm-app
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+    kubernetes.io/ingress.class: nginx
+spec:
+  tls:
+  - hosts:
+    - sm.4.255.38.25.nip.io #Use your domain
+    secretName: tls-secret
+  rules:
+  - host: sm.4.255.38.25.nip.io # update IP address here
+    http:
+      paths:
+      - pathType: Prefix
+        backend:
+          service:
+            name: sm-frontend-service
+            port:
+              number: 3000
+        path: /
