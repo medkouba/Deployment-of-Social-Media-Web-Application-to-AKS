@@ -2,10 +2,11 @@ version: '3.8'
 
 services:
 
-  sm-front-dev:
+  sm-frontend-dev:
     build:
       context: .
-    container_name: sm-front-dev
+      target: dev
+    container_name: sm-frontend-dev
     network_mode: sm-network
     env_file:
       - ${env_file:-.env}
@@ -13,26 +14,30 @@ services:
       - "${FRONTEND_DEV_PORT}:${FRONTEND_PORT}"
 
 
-  sm-front-stage:
+  sm-frontend-stage:
     build:
       context: .
       target: prod
-    image: ${GITLAB_URL}/${IMAGE_NAME:-sm-frontend}:${TAG:-latest}
-    container_name: sm-front-stage
+    # image: ${GITLAB_URL}/${IMAGE_NAME:-sm-frontend}:${TAG:-latest}
+    container_name: sm-frontend-stage
     network_mode: sm-network
     env_file:
       - ${env_file:-.env}
     ports:
-      - "${FRONTEND_PROD_PORT}:${FRONTEND_PORT}"  
+      - "80:80"  
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf 
 
-  sm-front-prod:
+  sm-frontend-prod:
     image: ${IMAGE_NAME:-sm-frontend}
-    container_name: sm-front-prod
+    container_name: sm-frontend-prod
     network_mode: sm-network
     env_file:
       - ${env_file:-.env}
-    ports:
+    ports: 
       - "${FRONTEND_PROD_PORT}:${FRONTEND_PORT}"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf 
 
 
 networks:

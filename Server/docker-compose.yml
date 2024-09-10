@@ -46,7 +46,7 @@ services:
     build:
       context: .
       target: dev
-    container_name: sm-back-dev
+    container_name: sm-backend-dev
     networks:
       - sm-network
     env_file:
@@ -62,8 +62,8 @@ services:
     build:
       context: .
       target: prod
-    image: ${GITLAB_URL}/${IMAGE_NAME:-sm-backend}:${TAG:-latest}
-    container_name: sm-back-stage
+    # image: ${GITLAB_URL}/${IMAGE_NAME:-sm-backend}:${TAG:-latest}
+    container_name: sm-backend-stage
     env_file:
       - ${env_file:-.env}
     networks:
@@ -77,7 +77,7 @@ services:
 
   sm-backend-prod:
     image: ${IMAGE_NAME:-sm-backend}
-    container_name: sm-back-prod
+    container_name: sm-backend-prod
     env_file:
       - ${env_file:-.env}
     networks:
